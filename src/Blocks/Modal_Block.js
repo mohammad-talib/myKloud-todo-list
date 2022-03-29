@@ -31,9 +31,7 @@ const ModalHeader = ({title}) => (
 
 const ModalBody = ({children}) => <View style={styles.body}>{children}</View>;
 
-const ModalBodyScroll = ({children}) => (
-  <ScrollView style={styles.body}>{children}</ScrollView>
-);
+
 
 const ModalFooter = ({children}) => (
   <View style={styles.footer}>{children}</View>
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
     // minHeight: 20,
   },
   footer: {
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
     alignItems: 'center',
     padding: 10,
     flexDirection: 'row',
@@ -78,5 +76,4 @@ const styles = StyleSheet.create({
 Modal_Block.Header = ModalHeader;
 Modal_Block.Container = ModalContainer;
 Modal_Block.Body = ModalBody;
-Modal_Block.BodyScroll = ModalBodyScroll;
 Modal_Block.Footer = ModalFooter;

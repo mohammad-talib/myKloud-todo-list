@@ -2,28 +2,28 @@ import {View, Text, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import React from 'react';
 import colors from '../assets/Colors';
 
-const TodoListItem = ({item, selectItem, onPress}) => {
+const TodoListItem = ({item, selectItem, onPress,onPressEdit}) => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={onPress} style={styles.containerFlex}>
+      <View  style={styles.containerFlex}>
         {/* Start Left Checkbox */}
-        <View style={styles.todo_Left}>
+        <TouchableOpacity onPress={onPress} style={styles.todo_Left}>
           <View
             style={{
               ...styles.todo_checkbox,
               borderColor:
                 item.priority == 1
-                  ? colors.green
+                  ? colors.mainColor
                   : item.priority == 2
                   ? colors.blue
-                  : colors.mainColor,
+                  : colors.green,
               backgroundColor:
                 selectItem.id == item.id
                   ? item.priority == 1
-                    ? colors.green
+                    ? colors.mainColor
                     : item.priority == 2
                     ? colors.blue
-                    : colors.mainColor
+                    : colors.green
                   : 'transparent',
             }}>
             {selectItem.id == item.id ? (
@@ -33,11 +33,11 @@ const TodoListItem = ({item, selectItem, onPress}) => {
               />
             ) : null}
           </View>
-        </View>
+        </TouchableOpacity>
         {/* End Left Checkbox */}
 
         {/* Start Right Text */}
-        <View style={styles.todo_Right}>
+        <TouchableOpacity onPress={onPressEdit} style={styles.todo_Right}>
           <Text
             style={{
               ...styles.todo_Right_Text,
@@ -47,9 +47,9 @@ const TodoListItem = ({item, selectItem, onPress}) => {
             }}>
             {item.name}
           </Text>
-        </View>
+        </TouchableOpacity>
         {/* Start Right Text */}
-      </TouchableOpacity>
+      </View>
     </View>
   );
 };

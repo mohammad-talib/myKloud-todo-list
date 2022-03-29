@@ -6,6 +6,7 @@ import {memo} from 'react/cjs/react.production.min';
 const ButtonCircle = ({type, onPress}) => {
   return (
     <TouchableOpacity
+    onPress={onPress}
       style={{
         ...styles.container,
         backgroundColor: type == 1 ? colors.blue : colors.mainColor,
