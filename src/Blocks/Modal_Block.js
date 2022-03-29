@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
     padding: 10,
     flexDirection: 'row',
     paddingVertical: 15,
+    paddingBottom:20
   },
 });
 

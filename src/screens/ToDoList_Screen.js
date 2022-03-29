@@ -1,5 +1,11 @@
-import {View, FlatList, Text} from 'react-native';
-import React, {useState} from 'react';
+import {
+  View,
+  FlatList,
+  Text,
+  ActivityIndicator,
+  ToastAndroid,
+} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import styles from '../../src/assets/Styles';
 import colors from '../../src/assets/Colors';
 import MainHeader from '../../src/Blocks/MainHeader';
@@ -10,13 +16,15 @@ import {Modal_Block} from '../../src/Blocks/Modal_Block';
 import TextInput_Block from '../Blocks/TextInput_Block';
 import Priority_Block from '../Blocks/Priority_Block';
 import Button_Modal from '../Blocks/Button_Modal';
-import { Language } from '../languages/Language';
+import {Language} from '../languages/Language';
+import {fetchData} from '../assets/api/fetchData';
 
 export default function ToDoList_Screen() {
+  // status
   const [data, setData] = useState([
-    {id: 1, name: 'Eat Cake', priority: 1},
-    {id: 2, name: 'Fix Bug', priority: 2},
-    {id: 3, name: 'finish Homwork', priority: 3},
+    // {id: 1, name: 'Eat Cake', priority: 1},
+    // {id: 2, name: 'Fix Bug', priority: 2},
+    // {id: 3, name: 'finish Homwork', priority: 3},
   ]);
 
   const [priority, setPriority] = useState([
@@ -24,15 +32,71 @@ export default function ToDoList_Screen() {
     {id: 2, color: colors.blue, priority: 2},
     {id: 3, color: colors.green, priority: 3},
   ]);
-
   const [selectPriority, setSelectPriority] = useState('');
   const [selectItem, setSelectItem] = useState('');
   const [task, setTask] = useState('');
   const [isVisible, setIsVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isEdit, setIsEdit] = useState('');
 
   // start Get Language
-  const languages = Language()
+  const languages = Language();
 
+  // functions
+  useEffect(() => {
+    getLists();
+  }, []);
+  // get List
+  async function getLists() {
+    const data = await fetchData('lists', 'GET');
+    if (data) {
+      setData(data);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
+    }
+  }
+
+  // Delete Item Form List
+  async function deleteList(id) {
+    const data = await fetchData(`lists/${id}`, 'DELETE');
+    if (data) {
+      getLists();
+      setIsLoading(false);
+      setSelectItem('');
+    } else {
+      setIsLoading(false);
+    }
+  }
+
+  // Add Item To List
+  async function AddList() {
+    const data = await fetchData(`lists/`, 'POST', {
+      name: task,
+      priority: selectPriority,
+    });
+    if (data) {
+      getLists();
+      setIsVisible(false);
+      setSelectPriority('');
+      setTask('');
+    }
+  }
+
+  // Edit Item from List
+  async function EditList(id) {
+    const data = await fetchData(`lists/${id}`, 'PUT', {
+      name: task,
+      priority: selectPriority,
+    });
+    if (data) {
+      getLists();
+      setIsVisible(false);
+      setSelectPriority('');
+      setTask('');
+    }
+    setIsEdit("");
+  }
 
   // =============== Start Render Item ================== //
   const renderTodoList = ({item, index}) => {
@@ -46,6 +110,9 @@ export default function ToDoList_Screen() {
           }
         }}
         onPressEdit={() => {
+          setTask(item.name);
+          setSelectPriority(item.priority);
+          setIsEdit(item.id);
           setIsVisible(true);
         }}
         item={item}
@@ -61,6 +128,16 @@ export default function ToDoList_Screen() {
     return <ItemSeparator />;
   };
   // =============== End Render Item ================== //
+
+  // ================ Start List Empty List ================ //
+  const _ListEmptyComponent = () => {
+    return (
+      <View style={styles.Container_Empty_List}>
+        <Text style={styles.Container_Empty_Text}>{languages.NoTask}</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
       {/* Start header */}
@@ -68,21 +145,27 @@ export default function ToDoList_Screen() {
       {/* End header */}
 
       {/* Start List */}
-      <FlatList
-        data={data}
-        renderItem={renderTodoList}
-        keyExtractor={_keyExtractor}
-        ItemSeparatorComponent={_ItemSeparator}
-      />
+      {isLoading ? (
+        <ActivityIndicator color={colors.mainColor} size={30} />
+      ) : (
+        <FlatList
+          contentContainerStyle={{flex: 1}}
+          data={data}
+          renderItem={renderTodoList}
+          keyExtractor={_keyExtractor}
+          ItemSeparatorComponent={_ItemSeparator}
+          ListEmptyComponent={_ListEmptyComponent}
+        />
+      )}
       {/* End List */}
 
       {/* Start Delete Float Button */}
       {selectItem ? (
         <ButtonCircle
           type={1}
-          //   onPress={() => {
-          //     setIsVisible(true);
-          //   }}
+          onPress={() => {
+            deleteList(selectItem.id);
+          }}
         />
       ) : null}
       {/* End Delete Float Button */}
@@ -144,6 +227,9 @@ export default function ToDoList_Screen() {
               <Button_Modal
                 onPress={() => {
                   setIsVisible(false);
+                  setIsEdit("");
+                  setTask('')
+                  setSelectPriority('')
                 }}
                 title={languages.Cancel}
                 color={'blue'}
@@ -152,9 +238,20 @@ export default function ToDoList_Screen() {
             <View>
               <Button_Modal
                 onPress={() => {
-                  setIsVisible(false);
+                  if (task && selectPriority) {
+                    if (isEdit) {
+                      EditList(isEdit);
+                    } else {
+                      AddList();
+                    }
+                  } else {
+                    ToastAndroid.show(
+                      languages.MessageFill,
+                      ToastAndroid.SHORT,
+                    );
+                  }
                 }}
-                title={languages.Add}
+                title={isEdit? languages.Edit : languages.Add}
                 color={'grayText'}
               />
             </View>

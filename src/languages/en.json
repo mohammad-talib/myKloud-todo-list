@@ -4,5 +4,10 @@
   "Title":"Title",
   "Priority":"Priority",
   "Cancel":"Cancel",
-  "Add":"Add"
+  "Add":"Add",
+  "Edit":"Edit",
+  "NoTask":"No Task",
+  "MessageFill":"The Title and priority must be filled in"
+
+
 }

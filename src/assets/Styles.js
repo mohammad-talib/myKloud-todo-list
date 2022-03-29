@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
   container_body: {
     paddingTop: 15,
     paddingBottom: 15,
-
   },
   Priority_Text_Box: {
     paddingBottom: 10,
@@ -25,10 +24,21 @@ const styles = StyleSheet.create({
   Priority_List: {
     flexDirection: 'row',
     alignItems: 'center',
-    width:"100%"
+    width: '100%',
   },
-  PaddingButton:{
-    paddingHorizontal:20
+  PaddingButton: {
+    paddingHorizontal: 20,
+  },
+
+  // ====================== Empty List =================== //
+  Container_Empty_List: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  Container_Empty_Text:{
+    fontSize:18,
+    color:colors.mainColor
   }
 });
 
