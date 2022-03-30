@@ -28,9 +28,9 @@ export default function ToDoList_Screen() {
   ]);
 
   const [priority, setPriority] = useState([
-    {id: 1, color: colors.mainColor, priority: 1},
-    {id: 2, color: colors.blue, priority: 2},
-    {id: 3, color: colors.green, priority: 3},
+    {id: 1, color: colors.mainColor, priority: 0},
+    {id: 2, color: colors.blue, priority: 1},
+    {id: 3, color: colors.green, priority: 2},
   ]);
   const [selectPriority, setSelectPriority] = useState('');
   const [selectItem, setSelectItem] = useState('');
@@ -137,7 +137,7 @@ export default function ToDoList_Screen() {
       </View>
     );
   };
-
+console.log('selectPriority', selectPriority)
   return (
     <View style={styles.container}>
       {/* Start header */}
@@ -238,7 +238,7 @@ export default function ToDoList_Screen() {
             <View>
               <Button_Modal
                 onPress={() => {
-                  if (task && selectPriority) {
+                  if (task && selectPriority>=0) {
                     if (isEdit) {
                       EditList(isEdit);
                     } else {

@@ -10,7 +10,10 @@ const Priority_Block = ({item, onPress, selectPriority}) => {
         style={{
           ...styles.innerContainer,
           borderColor: item.color,
-          backgroundColor: item.priority == selectPriority ? item.color : 'transparent',
+          backgroundColor:
+            item.priority == parseInt(selectPriority)
+              ? item.color
+              : 'transparent',
         }}
       />
     </View>

@@ -12,16 +12,16 @@ const TodoListItem = ({item, selectItem, onPress,onPressEdit}) => {
             style={{
               ...styles.todo_checkbox,
               borderColor:
-                item.priority == 1
+                item.priority == 0
                   ? colors.mainColor
-                  : item.priority == 2
+                  : item.priority == 1
                   ? colors.blue
                   : colors.green,
               backgroundColor:
                 selectItem.id == item.id
-                  ? item.priority == 1
+                  ? item.priority == 0
                     ? colors.mainColor
-                    : item.priority == 2
+                    : item.priority == 1
                     ? colors.blue
                     : colors.green
                   : 'transparent',
