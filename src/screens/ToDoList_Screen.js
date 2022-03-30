@@ -21,12 +21,7 @@ import {fetchData} from '../assets/api/fetchData';
 
 export default function ToDoList_Screen() {
   // status
-  const [data, setData] = useState([
-    // {id: 1, name: 'Eat Cake', priority: 1},
-    // {id: 2, name: 'Fix Bug', priority: 2},
-    // {id: 3, name: 'finish Homwork', priority: 3},
-  ]);
-
+  const [data, setData] = useState([]);
   const [priority, setPriority] = useState([
     {id: 1, color: colors.mainColor, priority: 0},
     {id: 2, color: colors.blue, priority: 1},
@@ -46,6 +41,7 @@ export default function ToDoList_Screen() {
   useEffect(() => {
     getLists();
   }, []);
+
   // get List
   async function getLists() {
     const data = await fetchData('lists', 'GET');
@@ -95,7 +91,7 @@ export default function ToDoList_Screen() {
       setSelectPriority('');
       setTask('');
     }
-    setIsEdit("");
+    setIsEdit('');
   }
 
   // =============== Start Render Item ================== //
@@ -137,7 +133,8 @@ export default function ToDoList_Screen() {
       </View>
     );
   };
-console.log('selectPriority', selectPriority)
+  // ================ End List Empty List ================ //
+
   return (
     <View style={styles.container}>
       {/* Start header */}
@@ -227,9 +224,9 @@ console.log('selectPriority', selectPriority)
               <Button_Modal
                 onPress={() => {
                   setIsVisible(false);
-                  setIsEdit("");
-                  setTask('')
-                  setSelectPriority('')
+                  setIsEdit('');
+                  setTask('');
+                  setSelectPriority('');
                 }}
                 title={languages.Cancel}
                 color={'blue'}
@@ -238,7 +235,7 @@ console.log('selectPriority', selectPriority)
             <View>
               <Button_Modal
                 onPress={() => {
-                  if (task && selectPriority>=0) {
+                  if (task && selectPriority >= 0) {
                     if (isEdit) {
                       EditList(isEdit);
                     } else {
@@ -251,7 +248,7 @@ console.log('selectPriority', selectPriority)
                     );
                   }
                 }}
-                title={isEdit? languages.Edit : languages.Add}
+                title={isEdit ? languages.Edit : languages.Add}
                 color={'grayText'}
               />
             </View>
